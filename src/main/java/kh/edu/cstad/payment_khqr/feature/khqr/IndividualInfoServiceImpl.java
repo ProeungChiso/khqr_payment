@@ -51,5 +51,28 @@ public class IndividualInfoServiceImpl implements IndividualInfoService {
         return "Verification Result: " + result;
     }
 
+    @Override
+    public String decode(String qrData) {
 
+        KHQRResponse<KHQRDecodeData> response = BakongKHQR.decode(qrData);
+
+        return "Decoded Data: " + response.getData().toString();
+    }
+
+    @Override
+    public String generateDeepLink(String url, String qrData, SourceInfo sourceInfo) {
+
+        SourceInfo source = new SourceInfo();
+        source.setAppName(sourceInfo.getAppName());
+        source.setAppIconUrl(sourceInfo.getAppIconUrl());
+        source.setAppDeepLinkCallback(sourceInfo.getAppDeepLinkCallback());
+
+        KHQRResponse<KHQRDeepLinkData> response = BakongKHQR.generateDeepLink(url, qrData, source);
+
+        if(response.getKHQRStatus().getCode() == 0){
+            return response.getData().getShortLink();
+        }else{
+            return response.getKHQRStatus().getMessage();
+        }
+    }
 }

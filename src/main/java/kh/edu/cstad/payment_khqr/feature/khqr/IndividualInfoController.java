@@ -1,5 +1,6 @@
 package kh.edu.cstad.payment_khqr.feature.khqr;
 
+import kh.edu.cstad.payment_khqr.feature.khqr.dto.KHQRDeepLink;
 import kh.gov.nbc.bakong_khqr.model.IndividualInfo;
 import kh.gov.nbc.bakong_khqr.model.KHQRData;
 import kh.gov.nbc.bakong_khqr.model.KHQRResponse;
@@ -36,6 +37,22 @@ public class IndividualInfoController {
             @RequestBody String qrData
     ) {
         String response = individualInfoService.verification(qrData);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/decode")
+    public ResponseEntity<String> decodeKHQRData(
+            @RequestBody String qrData
+    ) {
+        String response = individualInfoService.decode(qrData);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/deeplink")
+    public ResponseEntity<String> generateDeepLink(
+            @RequestBody KHQRDeepLink request
+            ) {
+        String response = individualInfoService.generateDeepLink(request.url(), request.qrData(), request.sourceInfo());
         return ResponseEntity.ok(response);
     }
 }
